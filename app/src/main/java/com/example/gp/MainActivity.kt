@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ImageView // 추가된 import
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-<<<<<<< HEAD
+
+        // 현재 사용하려는 레이아웃을 선택해야 합니다. login 화면을 사용하려면 아래를 사용하세요.
         setContentView(R.layout.login)
 
         // UI 요소 초기화
@@ -35,17 +36,11 @@ class MainActivity : AppCompatActivity() {
 
         // 시스템 바 인셋 처리
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
-=======
-        setContentView(R.layout.activity_main)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
->>>>>>> ec17bf3860d1a7c930c13d80192bf381eabdbb21
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-<<<<<<< HEAD
         // 로그인 버튼 클릭 리스너
         buttonLogin.setOnClickListener {
             val email = editTextEmail.text.toString()
@@ -59,17 +54,6 @@ class MainActivity : AppCompatActivity() {
             // 회원가입 화면으로 전환
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
-=======
-        if (savedInstanceState == null) {
-            Handler(Looper.getMainLooper()).postDelayed({
-                Log.d("MainActivity", "Navigating to ViewPagerFragment")
-                findViewById<ImageView>(R.id.myImageView).visibility = View.GONE
-
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ViewPagerFragment())
-                    .commit()
-            }, 2000)
->>>>>>> ec17bf3860d1a7c930c13d80192bf381eabdbb21
         }
     }
 }
