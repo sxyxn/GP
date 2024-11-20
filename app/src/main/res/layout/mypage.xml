@@ -82,7 +82,6 @@
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:background="#C3C3C3"
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="55dp"
         tools:layout_editor_absoluteY="524dp">
@@ -92,7 +91,7 @@
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:background="#C3C3C3"android:background="@drawable/rounded_border"
+        android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="225dp"
         tools:layout_editor_absoluteY="524dp">
 

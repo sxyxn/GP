@@ -24,7 +24,6 @@
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:background="#C3C3C3"
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="59dp"
         tools:layout_editor_absoluteY="247dp">
@@ -34,7 +33,6 @@
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:background="#C3C3C3"
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="59dp"
         tools:layout_editor_absoluteY="404dp">
@@ -44,7 +42,6 @@
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:background="#C3C3C3"
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="59dp"
         tools:layout_editor_absoluteY="566dp">
@@ -54,7 +51,6 @@
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:background="#C3C3C3"
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="216dp"
         tools:layout_editor_absoluteY="404dp">
@@ -64,7 +60,6 @@
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:background="#C3C3C3"
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="216dp"
         tools:layout_editor_absoluteY="247dp">
