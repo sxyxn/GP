@@ -82,5 +82,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
+    <Button
+        android:id="@+id/openChatbotButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/button_border"
+        android:text="챗봇"
+        android:textColor="#08538A"
+        tools:layout_editor_absoluteX="72dp"
+        tools:layout_editor_absoluteY="515dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

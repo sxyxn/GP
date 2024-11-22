@@ -1,9 +1,15 @@
+package com.example.gp
+
 import com.google.gson.annotations.SerializedName
 
-class ChatbotResponse {
+data class ChatbotResponse(
     @SerializedName("id")
-    var id: String? = null
+    val id: String,
+    @SerializedName("choices")
+    val choices: List<Choice>
+)
 
-    @SerializedName("completion")
-    var completion: String? = null
-}
+data class Choice(
+    @SerializedName("message")
+    val message: Message
+)
