@@ -12,17 +12,10 @@ class LoginFragment : Fragment(R.layout.login) {
         super.onViewCreated(view, savedInstanceState)
 
         val signupButton = view.findViewById<Button>(R.id.button)
-        val openChatbotButton = view.findViewById<Button>(R.id.openChatbotButton)
 
         signupButton.setOnClickListener {
             // 회원가입 화면으로 이동
             val intent = Intent(requireContext(), SignupActivity::class.java)
-            startActivity(intent)
-        }
-
-        openChatbotButton.setOnClickListener {
-            // 챗봇 화면으로 이동(확인용)
-            val intent = Intent(requireContext(), ChatbotActivity::class.java)
             startActivity(intent)
         }
     }
