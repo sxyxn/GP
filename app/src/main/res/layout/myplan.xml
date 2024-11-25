@@ -13,14 +13,6 @@
         tools:layout_editor_absoluteX="-2dp"
         tools:layout_editor_absoluteY="-24dp" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="나의 플랜"
-        tools:layout_editor_absoluteX="33dp"
-        tools:layout_editor_absoluteY="199dp" />
-
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="130dp"
@@ -45,7 +37,6 @@
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="59dp"
         tools:layout_editor_absoluteY="566dp">
-
     </FrameLayout>
 
     <FrameLayout
@@ -54,7 +45,6 @@
         android:background="@drawable/rounded_border"
         tools:layout_editor_absoluteX="216dp"
         tools:layout_editor_absoluteY="404dp">
-
     </FrameLayout>
 
     <FrameLayout

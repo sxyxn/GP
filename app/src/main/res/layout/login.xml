@@ -49,7 +49,7 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         android:paddingStart="20dp"
-        android:text="ID"
+        android:hint="ID"
         android:textColor="#08538A"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"

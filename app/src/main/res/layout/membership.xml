@@ -15,7 +15,7 @@
         android:background="@null"
         android:ems="10"
         android:inputType="text"
-        android:text="이름"
+        android:hint="이름"
         android:textColor="#808080"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
@@ -39,7 +39,7 @@
         android:background="@null"
         android:ems="10"
         android:inputType="textEmailAddress"
-        tools:text="이메일"
+        android:hint="아이디(이메일)"
         android:textColor="#808080"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText" />

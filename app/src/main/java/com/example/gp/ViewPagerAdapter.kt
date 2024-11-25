@@ -18,7 +18,6 @@ class ViewPagerAdapter(private val imageItems: List<Int>) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // 이미지 리소스를 설정
         holder.imageView.setImageResource(imageItems[position])
     }
 
