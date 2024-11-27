@@ -1,6 +1,7 @@
+package com.example.gp
+
 import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -18,13 +19,18 @@ class ChatbotClient {
     }
 
     fun getChatResponse(userInput: String, callback: Callback<ChatbotResponse>) {
-        // Usage example
-        val request = ChatbotRequest().apply {
-            this.userInput = userInput // `this` 키워드를 사용하여 클래스의 프로퍼티에 접근
-        }
+        val messages = listOf(
+            Message(role = "user", content = userInput)
+        )
+
+        val request = ChatbotRequest(
+            model = "gpt-3.5-turbo",
+            messages = messages,
+            max_tokens = 150,
+            temperature = 0.7
+        )
 
         val call = service.getCompletion(request)
         call.enqueue(callback)
     }
-
 }

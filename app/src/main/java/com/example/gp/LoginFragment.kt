@@ -43,5 +43,16 @@ class LoginFragment : Fragment(R.layout.login) {
                 Toast.makeText(requireContext(), "이메일 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // 회원가입 버튼 클릭 리스너 추가
+        val signupButton = view.findViewById<Button>(R.id.button)
+        signupButton.setOnClickListener {
+            // 로그 추가
+            println("Signup button clicked!")
+
+            // SignupActivity로 이동
+            val intent = Intent(requireContext(), SignupActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
