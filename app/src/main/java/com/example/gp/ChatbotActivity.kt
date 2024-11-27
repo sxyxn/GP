@@ -28,6 +28,8 @@ class ChatbotActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = chatAdapter
 
+        chatAdapter.addMessage(ChatMessage("안녕하세요! 부산 관광지에 대해 물어보세요.", false))
+
         sendButton.setOnClickListener {
             val userInput = inputEditText.text.toString()
             if (userInput.isNotEmpty()) {
