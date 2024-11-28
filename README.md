@@ -1,2 +1,4 @@
 ###캡스톤 디자인
 부산 관광지 소개 챗봇 안드로이드 앱
+
+sssk-proj-dLpiKSJ6eC2RToFRJ65iReQrsvfVYN-X1wfXzJ21q79AMLHfa1SYlHnkuR8cArUd1tOnhOvw7AT3BlbkFJBj0jASDYNj50kHLKUb68CvzgkxyCF5weYVcv4sx5QhR6opUQ36eT4X1p-poxJzYtDmoRoBRMwA
