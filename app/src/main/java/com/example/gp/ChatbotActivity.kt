@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +43,25 @@ class ChatbotActivity : AppCompatActivity() {
                             response.body()?.let {
                                 val reply = it.choices.firstOrNull()?.message?.content ?: "No response"
                                 chatAdapter.addMessage(ChatMessage(reply, false))
+
+                                // 관광지 추천에 대한 응답 처리
+                                val recommendedPlaces = parseRecommendedPlaces(reply)
+                                for (place in recommendedPlaces) {
+                                    // 답변에 해당하는 추천 장소 출력
+                                    chatAdapter.addMessage(ChatMessage("추천된 장소: $place", false))
+
+                                    // "추가하기" 버튼을 대신 텍스트로 표시하여 위치를 확인
+                                    chatAdapter.addMessage(ChatMessage("버튼: $place 추가하기 (버튼 위치)", false))
+
+                                    // 실제 버튼을 UI에 추가하려면 아래 코드를 사용해야 합니다.
+                                    // val addButton = Button(this@ChatbotActivity).apply {
+                                    //     text = "$place 추가하기"
+                                    //     setOnClickListener {
+                                    //         showAddToPlanDialog(place)
+                                    //     }
+                                    // }
+                                    // 여기서 RecyclerView 아이템으로 버튼을 추가하거나 적절한 뷰에 버튼을 추가할 수 있습니다.
+                                }
                             }
                         } else {
                             chatAdapter.addMessage(ChatMessage("Error: ${response.errorBody()?.string()}", false))
@@ -54,5 +74,21 @@ class ChatbotActivity : AppCompatActivity() {
                 })
             }
         }
+    }
+
+    private fun parseRecommendedPlaces(reply: String): List<String> {
+        val places = mutableListOf<String>()
+        val regex = Regex("\\d+\\.\\s([가-힣]+(?:\\s해수욕장|\\s마을|\\s공원))")
+        val matches = regex.findAll(reply)
+        for (match in matches) {
+            places.add(match.groupValues[1])
+        }
+        return places
+    }
+
+    private fun addToTravelPlan(place: String, category: String) {
+        // 여행 계획에 장소 추가 - 데이터베이스 작업을 수행할 수 있음
+        // 예시로 로그 출력
+        println("$place 추가됨: $category")
     }
 }
