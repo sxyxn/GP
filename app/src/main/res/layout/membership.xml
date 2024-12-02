@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:backgroundTint="#FFFFFF"
-        android:background="@drawable/button_border"
+        android:background="@drawable/rounded_button"
         android:text="회원가입"
         android:textColor="#08538A"
         app:layout_constraintBottom_toBottomOf="parent"
