@@ -34,7 +34,8 @@
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gotogp" />
+        app:srcCompat="@drawable/gotogp"
+        android:contentDescription="Go to GP page" />
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -45,7 +46,8 @@
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gotolist" />
+        app:srcCompat="@drawable/gotolist"
+        android:contentDescription="Go to List page" />
 
     <ImageButton
         android:id="@+id/imageButton3"
@@ -56,6 +58,7 @@
         app:layout_constraintHorizontal_bias="0.955"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/me" />
+        app:srcCompat="@drawable/me"
+        android:contentDescription="Profile button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

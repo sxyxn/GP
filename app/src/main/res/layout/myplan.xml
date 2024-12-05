@@ -3,57 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/main">
 
+    <!-- ImageView 배치 -->
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/myImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/myplan"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="-24dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Plan Image" />
 
-    <FrameLayout
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:background="@drawable/rounded_border"
-        tools:layout_editor_absoluteX="59dp"
-        tools:layout_editor_absoluteY="247dp">
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:background="@drawable/rounded_border"
-        tools:layout_editor_absoluteX="59dp"
-        tools:layout_editor_absoluteY="404dp">
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:background="@drawable/rounded_border"
-        tools:layout_editor_absoluteX="59dp"
-        tools:layout_editor_absoluteY="566dp">
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:background="@drawable/rounded_border"
-        tools:layout_editor_absoluteX="216dp"
-        tools:layout_editor_absoluteY="404dp">
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:background="@drawable/rounded_border"
-        tools:layout_editor_absoluteX="216dp"
-        tools:layout_editor_absoluteY="247dp">
-
-    </FrameLayout>
+    <!-- CalendarView 추가 -->
+    <android.widget.CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/myImageView"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
