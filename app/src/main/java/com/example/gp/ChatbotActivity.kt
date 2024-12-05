@@ -78,7 +78,7 @@ class ChatbotActivity : AppCompatActivity() {
 
     private fun parseRecommendedPlaces(reply: String): List<String> {
         val places = mutableListOf<String>()
-        val regex = Regex("\\d+\\.\\s([가-힣]+(?:\\s해수욕장|\\s마을|\\s공원))")
+        val regex = Regex("\\d+\\.\\s([^\n]+)")
         val matches = regex.findAll(reply)
         for (match in matches) {
             places.add(match.groupValues[1])
