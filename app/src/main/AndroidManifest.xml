@@ -26,6 +26,9 @@
         <activity android:name=".SignupActivity" />
         <activity android:name=".AfterLoginHomeActivity" />
         <activity android:name=".ChatbotActivity" />
+        <activity android:name=".MyPlanActivity" />
+        <activity android:name=".MyPageActivity" />
+        <activity android:name=".LoginActivity" />
 
     </application>
 

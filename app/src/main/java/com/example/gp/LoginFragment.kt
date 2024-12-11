@@ -22,34 +22,40 @@ class LoginFragment : Fragment(R.layout.login) {
         // 로그인 버튼 클릭 리스너
         val loginButton = view.findViewById<Button>(R.id.button2)
         loginButton.setOnClickListener {
-            val email = view.findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString()
-            val password = view.findViewById<EditText>(R.id.editTextTextPassword).text.toString()
+            val email = view.findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString().trim()
+            val password = view.findViewById<EditText>(R.id.editTextTextPassword).text.toString().trim()
 
+            // 입력값 검증
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(requireContext(), "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // 데이터베이스에서 사용자 가져오기
             val user = dbHelper.getUserById(email)
-            if (user != null && user.password == password) {
-                Toast.makeText(requireContext(), "로그인 성공! 환영합니다, ${user.name}.", Toast.LENGTH_SHORT).show()
 
-                // 메인 화면으로 이동
-                val intent = Intent(requireContext(), AfterLoginHomeActivity::class.java)
-                startActivity(intent)
-                // 현재 Activity 종료
-                requireActivity().finish()
+            if (user != null) {
+                // 사용자 정보와 비밀번호 확인
+                if (user.password == password) {
+                    Toast.makeText(requireContext(), "로그인 성공! 환영합니다, ${user.name}.", Toast.LENGTH_SHORT).show()
+
+                    // 메인 화면으로 이동
+                    val intent = Intent(requireContext(), AfterLoginHomeActivity::class.java)
+                    intent.putExtra("userEmail", user.id) // 사용자 이메일 전달
+                    startActivity(intent)
+                    requireActivity().finish()
+                } else {
+                    Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(requireContext(), "이메일 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+                // 이메일이 존재하지 않는 경우
+                Toast.makeText(requireContext(), "정보가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
         // 회원가입 버튼 클릭 리스너 추가
         val signupButton = view.findViewById<Button>(R.id.button)
         signupButton.setOnClickListener {
-            // 로그 추가
-            println("Signup button clicked!")
-
             // SignupActivity로 이동
             val intent = Intent(requireContext(), SignupActivity::class.java)
             startActivity(intent)

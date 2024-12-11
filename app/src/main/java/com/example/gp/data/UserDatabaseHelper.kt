@@ -62,4 +62,15 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         cursor.close()
         return user
     }
+
+    // 비밀번호 업데이트 메서드
+    fun updatePassword(id: String, newPassword: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_PASSWORD, newPassword)
+        }
+        val rowsAffected = db.update(TABLE_USER, values, "$COLUMN_ID = ?", arrayOf(id))
+        return rowsAffected > 0 // 1개 이상의 행이 업데이트되었는지 확인
+    }
+
 }
