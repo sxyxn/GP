@@ -131,7 +131,7 @@ class ChatbotClient {
         messages.add(Message(role = "user", content = userInput))
 
         // ChatbotRequest 생성 시 학습 데이터와 사용자 질문을 결합하여 프롬프트로 사용
-        val request = ChatbotRequest(ㅂ
+        val request = ChatbotRequest(
             model = "gpt-3.5-turbo",
             messages = listOf(
                 Message(role = "system", content = "당신은 부산 관광 계획 구성을 도와주는 가이드로서 사용자가 부산 관광지에 대해 질문하면 학습한 관광지 정보 중에서 사용자의 요구에 맞는 관광지를 추천해야 한다."), //역할 정보 추가
