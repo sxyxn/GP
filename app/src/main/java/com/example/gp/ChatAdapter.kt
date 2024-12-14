@@ -2,27 +2,64 @@ package com.example.gp
 
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-data class ChatMessage(val message: String, val isUser: Boolean)
+data class ChatMessage(
+    val message: String, // 메시지 내용
+    val isUser: Boolean, // 사용자가 보낸 메시지인지 여부
+    val isButton: Boolean = false // 버튼 관련 필드 (기본값은 false)
+)
 
-class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
+class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val VIEW_TYPE_TEXT = 0
+    private val VIEW_TYPE_BUTTON = 1
 
     inner class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.chatbot_message, parent, false)
-        return ChatViewHolder(view)
+    inner class ButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val button: Button = itemView.findViewById(R.id.addPlaceButton)  // 올바르게 정의된 ID를 사용합니다.
     }
 
-    override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            VIEW_TYPE_TEXT -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.chatbot_message, parent, false)
+                ChatViewHolder(view)
+            }
+            VIEW_TYPE_BUTTON -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.chatbot_button, parent, false)
+                ButtonViewHolder(view)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val chatMessage = messages[position]
-        holder.messageTextView.text = chatMessage.message
-        holder.messageTextView.textAlignment = if (chatMessage.isUser) View.TEXT_ALIGNMENT_TEXT_END else View.TEXT_ALIGNMENT_TEXT_START
+
+        when (holder) {
+            is ChatViewHolder -> {
+                holder.messageTextView.text = chatMessage.message
+                holder.messageTextView.textAlignment = if (chatMessage.isUser) View.TEXT_ALIGNMENT_TEXT_END else View.TEXT_ALIGNMENT_TEXT_START
+            }
+            is ButtonViewHolder -> {
+                holder.button.text = "${chatMessage.message} 추가하기"
+                holder.button.setOnClickListener {
+                    // 버튼 클릭 시의 동작 정의 (예: 장소 추가 등)
+                    addToTravelPlan(chatMessage.message)
+                }
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (messages[position].isButton) VIEW_TYPE_BUTTON else VIEW_TYPE_TEXT
     }
 
     override fun getItemCount(): Int {
@@ -32,5 +69,11 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
     fun addMessage(message: ChatMessage) {
         messages.add(message)
         notifyItemInserted(messages.size - 1)
+    }
+
+    private fun addToTravelPlan(place: String) {
+        // 여행 계획에 장소 추가하는 로직을 처리합니다.
+        // 예를 들어, 로그 출력
+        println("$place 추가됨")
     }
 }

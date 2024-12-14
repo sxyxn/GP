@@ -47,20 +47,8 @@ class ChatbotActivity : AppCompatActivity() {
                                 // 관광지 추천에 대한 응답 처리
                                 val recommendedPlaces = parseRecommendedPlaces(reply)
                                 for (place in recommendedPlaces) {
-                                    // 답변에 해당하는 추천 장소 출력
-                                    chatAdapter.addMessage(ChatMessage("추천된 장소: $place", false))
-
-                                    // "추가하기" 버튼을 대신 텍스트로 표시하여 위치를 확인
-                                    chatAdapter.addMessage(ChatMessage("버튼: $place 추가하기 (버튼 위치)", false))
-
-                                    // 실제 버튼을 UI에 추가하려면 아래 코드를 사용해야 합니다.
-                                    // val addButton = Button(this@ChatbotActivity).apply {
-                                    //     text = "$place 추가하기"
-                                    //     setOnClickListener {
-                                    //         showAddToPlanDialog(place)
-                                    //     }
-                                    // }
-                                    // 여기서 RecyclerView 아이템으로 버튼을 추가하거나 적절한 뷰에 버튼을 추가할 수 있습니다.
+                                    // 추천 장소에 대해 버튼 메시지 추가
+                                    chatAdapter.addMessage(ChatMessage(place, false, isButton = true))
                                 }
                             }
                         } else {
