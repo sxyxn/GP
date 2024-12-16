@@ -1,6 +1,7 @@
 package com.example.gp
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -39,9 +40,15 @@ class LoginFragment : Fragment(R.layout.login) {
                 if (user.password == password) {
                     Toast.makeText(requireContext(), "로그인 성공! 환영합니다, ${user.name}.", Toast.LENGTH_SHORT).show()
 
+                    // 사용자 ID를 SharedPreferences에 저장
+                    val sharedPreferences = requireContext().getSharedPreferences("user_prefs", android.content.Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putString("user_id", user.id)  // 사용자 ID 저장
+                    editor.apply()
+
                     // 메인 화면으로 이동
                     val intent = Intent(requireContext(), AfterLoginHomeActivity::class.java)
-                    intent.putExtra("userEmail", user.id) // 사용자 이메일 전달
+                    intent.putExtra("userEmail", user.id)  // 필요시 이메일을 넘길 수 있습니다
                     startActivity(intent)
                     requireActivity().finish()
                 } else {
