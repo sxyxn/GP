@@ -83,11 +83,13 @@ class ChatbotActivity : AppCompatActivity() {
                 val time = timeEditText.text.toString()
                 val activity = activityEditText.text.toString()
 
-                // DB에 여행 계획 추가
-                val userId = "currentUser"  // 실제 사용자 아이디로 변경
+                // SharedPreferences에서 로그인한 사용자 ID를 가져옴
+                val userId = getUserIdFromPreferences(this)
+
                 val category = ""
                 val address = ""
 
+                // DB에 여행 계획 추가
                 dbHelper.addTravelPlan(userId, category, date, time, place, address, activity)
                 Toast.makeText(this, "$place 여행 계획이 추가되었습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -95,6 +97,12 @@ class ChatbotActivity : AppCompatActivity() {
             .create()
 
         dialog.show()
+    }
+
+    // SharedPreferences에서 로그인한 사용자 ID를 가져오는 함수
+    private fun getUserIdFromPreferences(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("user_id", "") ?: ""
     }
 
     private fun parseRecommendedPlaces(reply: String): List<String> {
