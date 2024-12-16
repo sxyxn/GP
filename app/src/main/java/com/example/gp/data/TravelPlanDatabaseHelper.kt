@@ -1,16 +1,19 @@
 package com.example.gp.data
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.content.ContentValues
+
 
 class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "TravelPlans.db" // 데이터베이스 이름
-        private const val DATABASE_VERSION = 1 // 데이터베이스 버전
+        private const val DATABASE_NAME = "TravelPlans.db"
+        private const val DATABASE_VERSION = 1
 
-        // 테이블 및 컬럼 정의
+
         const val TABLE_NAME = "TravelPlans"
         const val COLUMN_NO = "NO"
         const val COLUMN_USER_ID = "아이디"
@@ -23,7 +26,7 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        // 테이블 생성 쿼리
+
         val createTableQuery = """
             CREATE TABLE $TABLE_NAME (
                 $COLUMN_NO INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,12 +39,71 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
                 $COLUMN_ACTIVITY TEXT NOT NULL
             )
         """
-        db.execSQL(createTableQuery) // 테이블 생성
+        db.execSQL(createTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // 기존 테이블 삭제 후 재생성
         db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
     }
+
+    fun getPlansByUserIdAndDate(userId: String, date: String): List<TravelPlan> {
+        val db = readableDatabase
+        val plans = mutableListOf<TravelPlan>()
+
+        val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_USER_ID = ? AND $COLUMN_DATE = ? ORDER BY $COLUMN_TIME"
+        val cursor: Cursor = db.rawQuery(query, arrayOf(userId, date))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val noIndex = cursor.getColumnIndex(COLUMN_NO)
+                val userIdIndex = cursor.getColumnIndex(COLUMN_USER_ID)
+                val categoryIndex = cursor.getColumnIndex(COLUMN_CATEGORY)
+                val dateIndex = cursor.getColumnIndex(COLUMN_DATE)
+                val timeIndex = cursor.getColumnIndex(COLUMN_TIME)
+                val destinationIndex = cursor.getColumnIndex(COLUMN_DESTINATION)
+                val addressIndex = cursor.getColumnIndex(COLUMN_ADDRESS)
+                val activityIndex = cursor.getColumnIndex(COLUMN_ACTIVITY)
+
+                if (noIndex != -1 && userIdIndex != -1 && categoryIndex != -1 &&
+                    dateIndex != -1 && timeIndex != -1 && destinationIndex != -1 &&
+                    addressIndex != -1 && activityIndex != -1) {
+
+                    val plan = TravelPlan(
+                        cursor.getInt(noIndex),
+                        cursor.getString(userIdIndex),
+                        cursor.getString(categoryIndex),
+                        cursor.getString(dateIndex),
+                        cursor.getString(timeIndex),
+                        cursor.getString(destinationIndex),
+                        cursor.getString(addressIndex),
+                        cursor.getString(activityIndex)
+                    )
+                    plans.add(plan)
+                }
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
+        return plans
+    }
+
+    // 여행 계획 추가 메서드
+    fun addTravelPlan(userId: String, category: String, date: String, time: String, destination: String, address: String, activity: String) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_USER_ID, userId)
+            put(COLUMN_CATEGORY, category)
+            put(COLUMN_DATE, date)
+            put(COLUMN_TIME, time)
+            put(COLUMN_DESTINATION, destination)
+            put(COLUMN_ADDRESS, address)
+            put(COLUMN_ACTIVITY, activity)
+        }
+        db.insert(TABLE_NAME, null, values)
+        db.close() // DB 연결 종료
+    }
+
 }
