@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.content.ContentValues
-
+import android.util.Log
 
 class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -47,11 +47,15 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
         onCreate(db)
     }
 
+
     fun getPlansByUserIdAndDate(userId: String, date: String): List<TravelPlan> {
         val db = readableDatabase
         val plans = mutableListOf<TravelPlan>()
 
+        // 쿼리 실행 전에 로그 출력
         val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_USER_ID = ? AND $COLUMN_DATE = ? ORDER BY $COLUMN_TIME"
+        Log.d("TravelPlan", "Query: $query, User ID: $userId, Date: $date") // 로그 추가
+
         val cursor: Cursor = db.rawQuery(query, arrayOf(userId, date))
 
         if (cursor.moveToFirst()) {
@@ -89,6 +93,7 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
 
         return plans
     }
+
 
     // 여행 계획 추가 메서드
     fun addTravelPlan(userId: String, category: String, date: String, time: String, destination: String, address: String, activity: String) {

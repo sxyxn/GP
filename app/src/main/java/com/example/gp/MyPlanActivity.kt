@@ -30,24 +30,28 @@ class MyPlanActivity : AppCompatActivity() {
     }
 
     private fun showTravelPlansForDate(date: String) {
-        // 유저 아이디를 가져옵니다 (예: 로그인한 유저의 아이디)
-        val userEmail = "user@example.com" // 예시: 로그인된 유저 아이디로 변경해야 함
+        // SharedPreferences에서 로그인된 유저 아이디 가져오기
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_id", null)
 
-        // 해당 날짜와 아이디에 맞는 여행 계획을 데이터베이스에서 조회
-        val travelPlans = dbHelper.getPlansByUserIdAndDate(userEmail, date)
+        if (userEmail != null) {
+            // 해당 날짜와 유저 아이디에 맞는 여행 계획을 데이터베이스에서 조회
+            val travelPlans = dbHelper.getPlansByUserIdAndDate(userEmail, date)
 
-        // 조회된 여행 계획이 없으면 "여행 계획이 없습니다"를 표시
-        if (travelPlans.isEmpty()) {
-            travelPlansTextView.text = "해당 날짜에 여행 계획이 없습니다."
-        } else {
-            // 여행 계획을 텍스트로 표시
-            val plansText = StringBuilder()
-            for (plan in travelPlans) {
-                plansText.append("시간: ${plan.time}, 여행지: ${plan.destination}, 활동: ${plan.activity}\n")
+            // 조회된 여행 계획이 없으면 "여행 계획이 없습니다"를 표시
+            if (travelPlans.isEmpty()) {
+                travelPlansTextView.text = "해당 날짜에 여행 계획이 없습니다."
+            } else {
+                // 여행 계획을 텍스트로 표시
+                val plansText = StringBuilder()
+                for (plan in travelPlans) {
+                    plansText.append("시간: ${plan.time}, 여행지: ${plan.destination}, 활동: ${plan.activity}\n")
+                }
+                travelPlansTextView.text = plansText.toString()
             }
-            travelPlansTextView.text = plansText.toString()
+        } else {
+            // 로그인되지 않은 상태일 경우 알림
+            travelPlansTextView.text = "로그인 후 다시 시도해주세요."
         }
     }
-
-
 }
