@@ -1,5 +1,6 @@
 package com.example.gp.data
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -43,5 +44,21 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
         // 기존 테이블 삭제 후 재생성
         db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
+    }
+
+    // 여행 계획 추가 메서드
+    fun addTravelPlan(userId: String, category: String, date: String, time: String, destination: String, address: String, activity: String) {
+        val db = writableDatabase // writableDatabase를 통해 DB에 쓰기 작업 수행
+        val values = ContentValues().apply {
+            put(COLUMN_USER_ID, userId)
+            put(COLUMN_CATEGORY, category)
+            put(COLUMN_DATE, date)
+            put(COLUMN_TIME, time)
+            put(COLUMN_DESTINATION, destination)
+            put(COLUMN_ADDRESS, address)
+            put(COLUMN_ACTIVITY, activity)
+        }
+        db.insert(TABLE_NAME, null, values) // 데이터를 테이블에 삽입
+        db.close() // DB 연결 종료
     }
 }
