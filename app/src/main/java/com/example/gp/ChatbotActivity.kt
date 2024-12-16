@@ -1,22 +1,16 @@
 package com.example.gp
 
-import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gp.data.TravelPlanDatabaseHelper
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import android.widget.Button
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 
 class ChatbotActivity : AppCompatActivity() {
     private lateinit var chatbotClient: ChatbotClient
     private lateinit var chatAdapter: ChatAdapter
-    private lateinit var dbHelper: TravelPlanDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +21,6 @@ class ChatbotActivity : AppCompatActivity() {
         val sendButton = findViewById<Button>(R.id.sendButton)
 
         chatbotClient = ChatbotClient()
-        dbHelper = TravelPlanDatabaseHelper(this)
 
         chatAdapter = ChatAdapter(mutableListOf())
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -61,49 +54,21 @@ class ChatbotActivity : AppCompatActivity() {
                 }
             }
         }
-
-        // 버튼 클릭 리스너 설정
-        chatAdapter.setOnButtonClickListener { place ->
-            showPlanInputDialog(place)
-        }
-    }
-
-    // 다이얼로그 생성 및 DB에 여행 계획 추가
-    private fun showPlanInputDialog(place: String) {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_plan_input, null)
-        val dateEditText = dialogView.findViewById<EditText>(R.id.dateEditText)
-        val timeEditText = dialogView.findViewById<EditText>(R.id.timeEditText)
-        val activityEditText = dialogView.findViewById<EditText>(R.id.activityEditText)
-
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("여행 계획 추가")
-            .setView(dialogView)
-            .setPositiveButton("추가") { _, _ ->
-                val date = dateEditText.text.toString()
-                val time = timeEditText.text.toString()
-                val activity = activityEditText.text.toString()
-
-                // DB에 여행 계획 추가
-                val userId = "currentUser"  // 실제 사용자 아이디로 변경
-                val category = ""
-                val address = ""
-
-                dbHelper.addTravelPlan(userId, category, date, time, place, address, activity)
-                Toast.makeText(this, "$place 여행 계획이 추가되었습니다.", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("취소", null)
-            .create()
-
-        dialog.show()
     }
 
     private fun parseRecommendedPlaces(reply: String): List<String> {
         val places = mutableListOf<String>()
-        val regex = Regex("\\d+\\.\\s([^\n]+)")
+        val regex = Regex("\\d+\\.\\s([^\n]+)")  // '숫자. 장소 이름' 형식으로 추출
         val matches = regex.findAll(reply)
         for (match in matches) {
-            places.add(match.groupValues[1])
+            places.add(match.groupValues[1])  // 장소 이름만 추가
         }
         return places
+    }
+
+    private fun addToTravelPlan(place: String, category: String) {
+        // 여행 계획에 장소 추가 - 데이터베이스 작업을 수행할 수 있음
+        // 예시로 로그 출력
+        println("$place 추가됨: $category")
     }
 }

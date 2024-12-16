@@ -2,8 +2,8 @@ package com.example.gp
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -18,20 +18,12 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
     private val VIEW_TYPE_TEXT = 0
     private val VIEW_TYPE_BUTTON = 1
 
-    // 클릭 리스너 인터페이스
-    private var onButtonClickListener: ((String) -> Unit)? = null
-
-    // 리스너 설정 메서드
-    fun setOnButtonClickListener(listener: (String) -> Unit) {
-        onButtonClickListener = listener
-    }
-
     inner class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
     }
 
     inner class ButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val button: Button = itemView.findViewById(R.id.addPlaceButton)  // 버튼 ID
+        val button: Button = itemView.findViewById(R.id.addPlaceButton)  // 올바르게 정의된 ID를 사용합니다.
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -59,8 +51,8 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
             is ButtonViewHolder -> {
                 holder.button.text = "${chatMessage.message} 추가하기"
                 holder.button.setOnClickListener {
-                    // 버튼 클릭 시 onButtonClickListener 호출
-                    onButtonClickListener?.invoke(chatMessage.message)
+                    // 버튼 클릭 시의 동작 정의 (예: 장소 추가 등)
+                    addToTravelPlan(chatMessage.message)
                 }
             }
         }
@@ -77,5 +69,11 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
     fun addMessage(message: ChatMessage) {
         messages.add(message)
         notifyItemInserted(messages.size - 1)
+    }
+
+    private fun addToTravelPlan(place: String) {
+        // 여행 계획에 장소 추가하는 로직을 처리합니다.
+        // 예를 들어, 로그 출력
+        println("$place 추가됨")
     }
 }
