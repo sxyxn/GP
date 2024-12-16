@@ -1,5 +1,6 @@
 package com.example.gp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -34,6 +35,9 @@ class LoginActivity : AppCompatActivity() {
             if (user != null && user.password == password) {
                 Toast.makeText(this, "로그인 성공! 환영합니다, ${user.name}.", Toast.LENGTH_SHORT).show()
 
+                // 유저 아이디를 SharedPreferences에 저장
+                saveUserIdToPreferences(this, user.id)
+
                 // 메인 화면으로 이동
                 val intent = Intent(this, AfterLoginHomeActivity::class.java)
                 intent.putExtra("userEmail", user.id)
@@ -50,5 +54,11 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    // 유저 아이디를 SharedPreferences에 저장하는 함수
+    private fun saveUserIdToPreferences(context: Context, userId: String) {
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("user_id", userId).apply()
     }
 }
