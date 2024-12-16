@@ -54,45 +54,54 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
 
         // 쿼리 실행 전에 로그 출력
         val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_USER_ID = ? AND $COLUMN_DATE = ? ORDER BY $COLUMN_TIME"
-        Log.d("TravelPlan", "Query: $query, User ID: $userId, Date: $date") // 로그 추가
+        Log.d("TravelPlan", "Executing query: $query, User ID: $userId, Date: $date") // 쿼리 및 파라미터 로그
 
-        val cursor: Cursor = db.rawQuery(query, arrayOf(userId, date))
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery(query, arrayOf(userId, date))
 
-        if (cursor.moveToFirst()) {
-            do {
-                val noIndex = cursor.getColumnIndex(COLUMN_NO)
-                val userIdIndex = cursor.getColumnIndex(COLUMN_USER_ID)
-                val categoryIndex = cursor.getColumnIndex(COLUMN_CATEGORY)
-                val dateIndex = cursor.getColumnIndex(COLUMN_DATE)
-                val timeIndex = cursor.getColumnIndex(COLUMN_TIME)
-                val destinationIndex = cursor.getColumnIndex(COLUMN_DESTINATION)
-                val addressIndex = cursor.getColumnIndex(COLUMN_ADDRESS)
-                val activityIndex = cursor.getColumnIndex(COLUMN_ACTIVITY)
+            if (cursor.moveToFirst()) {
+                do {
+                    // 컬럼 인덱스 가져오기 (필수 항목만 체크)
+                    val noIndex = cursor.getColumnIndex(COLUMN_NO)
+                    val userIdIndex = cursor.getColumnIndex(COLUMN_USER_ID)
+                    val categoryIndex = cursor.getColumnIndex(COLUMN_CATEGORY)
+                    val dateIndex = cursor.getColumnIndex(COLUMN_DATE)
+                    val timeIndex = cursor.getColumnIndex(COLUMN_TIME)
+                    val destinationIndex = cursor.getColumnIndex(COLUMN_DESTINATION)
+                    val addressIndex = cursor.getColumnIndex(COLUMN_ADDRESS)
+                    val activityIndex = cursor.getColumnIndex(COLUMN_ACTIVITY)
 
-                if (noIndex != -1 && userIdIndex != -1 && categoryIndex != -1 &&
-                    dateIndex != -1 && timeIndex != -1 && destinationIndex != -1 &&
-                    addressIndex != -1 && activityIndex != -1) {
+                    // 데이터가 유효한지 확인
+                    if (noIndex != -1 && userIdIndex != -1 && categoryIndex != -1 &&
+                        dateIndex != -1 && timeIndex != -1 && destinationIndex != -1 &&
+                        addressIndex != -1 && activityIndex != -1) {
 
-                    val plan = TravelPlan(
-                        cursor.getInt(noIndex),
-                        cursor.getString(userIdIndex),
-                        cursor.getString(categoryIndex),
-                        cursor.getString(dateIndex),
-                        cursor.getString(timeIndex),
-                        cursor.getString(destinationIndex),
-                        cursor.getString(addressIndex),
-                        cursor.getString(activityIndex)
-                    )
-                    plans.add(plan)
-                }
-            } while (cursor.moveToNext())
+                        // 여행 계획 객체 생성
+                        val plan = TravelPlan(
+                            cursor.getInt(noIndex),
+                            cursor.getString(userIdIndex),
+                            cursor.getString(categoryIndex),
+                            cursor.getString(dateIndex),
+                            cursor.getString(timeIndex),
+                            cursor.getString(destinationIndex),
+                            cursor.getString(addressIndex),
+                            cursor.getString(activityIndex)
+                        )
+                        plans.add(plan)
+                    }
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("TravelPlan", "Error while fetching travel plans: ${e.message}")
+        } finally {
+            cursor?.close() // 커서 닫기
+            db.close() // 데이터베이스 연결 닫기
         }
-
-        cursor.close()
-        db.close()
 
         return plans
     }
+
 
 
     // 여행 계획 추가 메서드
