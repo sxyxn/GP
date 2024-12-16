@@ -7,9 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ChatbotActivity : AppCompatActivity() {
     private lateinit var chatbotClient: ChatbotClient
@@ -37,39 +34,34 @@ class ChatbotActivity : AppCompatActivity() {
                 chatAdapter.addMessage(ChatMessage(userInput, true))
                 inputEditText.text.clear()
 
-                chatbotClient.getChatResponse(userInput, object : Callback<ChatbotResponse> {
-                    override fun onResponse(call: Call<ChatbotResponse>, response: Response<ChatbotResponse>) {
-                        if (response.isSuccessful) {
-                            response.body()?.let {
-                                val reply = it.choices.firstOrNull()?.message?.content ?: "No response"
-                                chatAdapter.addMessage(ChatMessage(reply, false))
+                // 임의로 챗봇 응답 생성 (API 호출 없이 대체)
+                val reply = """
+                    1. 해운대 해수욕장
+                    - 해운대 해수욕장
+                    - 부산에서 가장 유명한 해수욕장으로 여름철에 많은 관광객이 방문합니다.
+                    - 수상 스포츠나 해변 산책
+                    2. 광안리 해수욕장
+                    - 광안리 해수욕장
+                    - 부산에서 야경이 아름다운 곳으로, 광안대교가 보이는 곳에서 해변 산책을 즐길 수 있습니다.
+                    - 야경 감상, 바다 수영
+                """.trimIndent()
 
-                                // 관광지 추천에 대한 응답 처리
-                                val recommendedPlaces = parseRecommendedPlaces(reply)
-                                for (place in recommendedPlaces) {
-                                    // 추천 장소에 대해 버튼 메시지 추가
-                                    chatAdapter.addMessage(ChatMessage(place, false, isButton = true))
-                                }
-                            }
-                        } else {
-                            chatAdapter.addMessage(ChatMessage("Error: ${response.errorBody()?.string()}", false))
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ChatbotResponse>, t: Throwable) {
-                        chatAdapter.addMessage(ChatMessage("Failed to connect: ${t.message}", false))
-                    }
-                })
+                // 버튼 추가를 위한 추천 장소 파싱
+                val recommendedPlaces = parseRecommendedPlaces(reply)
+                for (place in recommendedPlaces) {
+                    // 추천 장소에 대해 버튼 메시지 추가
+                    chatAdapter.addMessage(ChatMessage(place, false, isButton = true))
+                }
             }
         }
     }
 
     private fun parseRecommendedPlaces(reply: String): List<String> {
         val places = mutableListOf<String>()
-        val regex = Regex("\\d+\\.\\s([^\n]+)")
+        val regex = Regex("\\d+\\.\\s([^\n]+)")  // '숫자. 장소 이름' 형식으로 추출
         val matches = regex.findAll(reply)
         for (match in matches) {
-            places.add(match.groupValues[1])
+            places.add(match.groupValues[1])  // 장소 이름만 추가
         }
         return places
     }
