@@ -10,23 +10,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/dateEditText"
-            android:hint="날짜"
-            android:inputType="date"
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="날짜" />
 
-        <EditText
-            android:id="@+id/timeEditText"
-            android:hint="시간"
-            android:inputType="time"
+        <TextView
+            android:id="@+id/dateTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="날짜 선택"
+            android:focusable="true"
+            android:background="@drawable/edittext_border"
+            android:padding="10dp"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시간" />
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="시간 선택"
+            android:focusable="true"
+            android:background="@drawable/edittext_border"
+            android:padding="10dp"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="활동" />
 
         <EditText
             android:id="@+id/activityEditText"
-            android:hint="활동"
+            android:hint="사진 촬영/휴식/식사 등"
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
