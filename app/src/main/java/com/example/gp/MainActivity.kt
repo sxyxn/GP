@@ -10,10 +10,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.gp.data.TravelPlanDatabaseHelper
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val dbHelper = TravelPlanDatabaseHelper(this)
+        dbHelper.writableDatabase // 데이터베이스를 참조하면 테이블이 자동 생성됩니다.
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
