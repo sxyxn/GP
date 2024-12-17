@@ -11,13 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gp.data.TravelPlanDatabaseHelper
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ChatbotActivity : AppCompatActivity() {
     private lateinit var chatbotClient: ChatbotClient
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var dbHelper: TravelPlanDatabaseHelper
+    private val placeAddressMap = mutableMapOf<String, String>() // 장소 이름과 주소 매핑
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,33 +44,32 @@ class ChatbotActivity : AppCompatActivity() {
 
                 // 임의로 챗봇 응답 생성 (API 호출 없이 대체)
                 val reply = """
-                    1. 해운대 해수욕장
-                    - 해운대 해수욕장
-                    - 부산에서 가장 유명한 해수욕장으로 여름철에 많은 관광객이 방문합니다.
-                    - 수상 스포츠나 해변 산책
-                    2. 광안리 해수욕장
-                    - 광안리 해수욕장
-                    - 부산에서 야경이 아름다운 곳으로, 광안대교가 보이는 곳에서 해변 산책을 즐길 수 있습니다.
-                    - 야경 감상, 바다 수영
+                    1. '해운대 해수욕장'(부산광역시 해운대구 우동)
+                     - 부산에서 가장 유명한 해수욕장으로 여름철에 많은 관광객이 방문합니다.
+                     - 수상 스포츠나 해변 산책
+                    2. '광안리 해수욕장'(부산광역시 수영구 광안동)
+                     - 광안대교가 보이는 야경 명소로 유명합니다.
+                     - 야경 감상, 바다 수영
                 """.trimIndent()
 
-                // 버튼 추가를 위한 추천 장소 파싱
+                // 이름과 주소를 파싱
                 val recommendedPlaces = parseRecommendedPlaces(reply)
-                for (place in recommendedPlaces) {
-                    // 추천 장소에 대해 버튼 메시지 추가
-                    chatAdapter.addMessage(ChatMessage(place, false, isButton = true))
+                for ((name, address) in recommendedPlaces) {
+                    placeAddressMap[name] = address // 이름과 주소 저장
+                    chatAdapter.addMessage(ChatMessage(name, false, isButton = true))
                 }
             }
         }
 
         // 버튼 클릭 리스너 설정
-        chatAdapter.setOnButtonClickListener { place ->
-            showPlanInputDialog(place)
+        chatAdapter.setOnButtonClickListener { placeName ->
+            val address = placeAddressMap[placeName] ?: ""
+            showPlanInputDialog(placeName, address)
         }
     }
 
     // 다이얼로그 생성 및 DB에 여행 계획 추가
-    private fun showPlanInputDialog(place: String) {
+    private fun showPlanInputDialog(place: String, address: String) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_plan_input, null)
         val dateTextView = dialogView.findViewById<TextView>(R.id.dateTextView)
         val timeTextView = dialogView.findViewById<TextView>(R.id.timeTextView)
@@ -88,7 +87,6 @@ class ChatbotActivity : AppCompatActivity() {
                 val userId = getUserIdFromPreferences(this)
 
                 val category = ""
-                val address = ""
 
                 // DB에 여행 계획 추가
                 dbHelper.addTravelPlan(userId, category, date, time, place, address, activity)
@@ -102,7 +100,7 @@ class ChatbotActivity : AppCompatActivity() {
         // 날짜 선택
         dateTextView.setOnClickListener {
             val calendar = Calendar.getInstance()
-            val datePickerDialog = DatePickerDialog(
+            DatePickerDialog(
                 this,
                 { _, year, month, dayOfMonth ->
                     val selectedDate = "$year-${month + 1}-$dayOfMonth"
@@ -111,14 +109,13 @@ class ChatbotActivity : AppCompatActivity() {
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
-            )
-            datePickerDialog.show()
+            ).show()
         }
 
         // 시간 선택
         timeTextView.setOnClickListener {
             val calendar = Calendar.getInstance()
-            val timePickerDialog = TimePickerDialog(
+            TimePickerDialog(
                 this,
                 { _, hourOfDay, minute ->
                     val selectedTime = String.format("%02d:%02d", hourOfDay, minute)
@@ -127,8 +124,7 @@ class ChatbotActivity : AppCompatActivity() {
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
                 true
-            )
-            timePickerDialog.show()
+            ).show()
         }
     }
 
@@ -138,12 +134,15 @@ class ChatbotActivity : AppCompatActivity() {
         return sharedPreferences.getString("user_id", "") ?: ""
     }
 
-    private fun parseRecommendedPlaces(reply: String): List<String> {
-        val places = mutableListOf<String>()
-        val regex = Regex("\\d+\\.\\s([^\n]+)")
+    // 추천 장소 이름과 주소를 파싱하는 함수
+    private fun parseRecommendedPlaces(reply: String): List<Pair<String, String>> {
+        val places = mutableListOf<Pair<String, String>>()
+        val regex = Regex("\\d+\\.\\s'([^']+)'\\(([^)]+)\\)") // 이름과 주소 추출
         val matches = regex.findAll(reply)
         for (match in matches) {
-            places.add(match.groupValues[1])
+            val name = match.groupValues[1] // 관광지 이름
+            val address = match.groupValues[2] // 관광지 주소
+            places.add(Pair(name, address))
         }
         return places
     }
