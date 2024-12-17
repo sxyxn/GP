@@ -72,7 +72,7 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
                 holder.messageTextView.text = chatMessage.message
             }
             is ButtonViewHolder -> {
-                holder.button.text = "${chatMessage.message} 추가하기"
+                holder.button.text = "${chatMessage.message} 추가"
                 holder.button.setOnClickListener {
                     // 버튼 클릭 시 onButtonClickListener 호출
                     onButtonClickListener?.invoke(chatMessage.message)
