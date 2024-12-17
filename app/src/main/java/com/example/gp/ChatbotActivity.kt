@@ -110,7 +110,7 @@ class ChatbotActivity : AppCompatActivity() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_plan_input, null)
         val dateTextView = dialogView.findViewById<TextView>(R.id.dateTextView)
         val timeTextView = dialogView.findViewById<TextView>(R.id.timeTextView)
-        val activityEditText = dialogView.findViewById<EditText>(R.id.activityInput)
+        val activityEditText = dialogView.findViewById<EditText>(R.id.activityEditText)
 
         val dialog = AlertDialog.Builder(this)
             .setTitle("여행 계획 추가")
