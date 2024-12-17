@@ -15,8 +15,10 @@ data class ChatMessage(
 
 class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val VIEW_TYPE_TEXT = 0
-    private val VIEW_TYPE_BUTTON = 1
+    // 뷰 타입 정의
+    private val VIEW_TYPE_BOT = 0
+    private val VIEW_TYPE_USER = 1
+    private val VIEW_TYPE_BUTTON = 2
 
     // 클릭 리스너 인터페이스
     private var onButtonClickListener: ((String) -> Unit)? = null
@@ -26,19 +28,30 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
         onButtonClickListener = listener
     }
 
-    inner class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    // 챗봇 메시지 ViewHolder (왼쪽 정렬)
+    inner class BotMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
     }
 
+    // 사용자 메시지 ViewHolder (오른쪽 정렬)
+    inner class UserMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val messageTextView: TextView = itemView.findViewById(R.id.messageTextView)
+    }
+
+    // 버튼 ViewHolder
     inner class ButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val button: Button = itemView.findViewById(R.id.addPlaceButton)  // 버튼 ID
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_TEXT -> {
+            VIEW_TYPE_BOT -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.chatbot_message, parent, false)
-                ChatViewHolder(view)
+                BotMessageViewHolder(view)
+            }
+            VIEW_TYPE_USER -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.user_message, parent, false)
+                UserMessageViewHolder(view)
             }
             VIEW_TYPE_BUTTON -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.chatbot_button, parent, false)
@@ -52,9 +65,11 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
         val chatMessage = messages[position]
 
         when (holder) {
-            is ChatViewHolder -> {
+            is BotMessageViewHolder -> {
                 holder.messageTextView.text = chatMessage.message
-                holder.messageTextView.textAlignment = if (chatMessage.isUser) View.TEXT_ALIGNMENT_TEXT_END else View.TEXT_ALIGNMENT_TEXT_START
+            }
+            is UserMessageViewHolder -> {
+                holder.messageTextView.text = chatMessage.message
             }
             is ButtonViewHolder -> {
                 holder.button.text = "${chatMessage.message} 추가하기"
@@ -67,7 +82,11 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) : RecyclerView
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (messages[position].isButton) VIEW_TYPE_BUTTON else VIEW_TYPE_TEXT
+        return when {
+            messages[position].isButton -> VIEW_TYPE_BUTTON
+            messages[position].isUser -> VIEW_TYPE_USER
+            else -> VIEW_TYPE_BOT
+        }
     }
 
     override fun getItemCount(): Int {
