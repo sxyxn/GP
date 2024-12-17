@@ -11,7 +11,7 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
 
     companion object {
         private const val DATABASE_NAME = "TravelPlans.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
 
         const val TABLE_NAME = "TravelPlans"
@@ -43,8 +43,10 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
-        onCreate(db)
+        if (oldVersion < 2) {
+            db.execSQL("DROP TABLE IF EXISTS TravelPlans")
+            onCreate(db)
+        }
     }
 
 
@@ -118,6 +120,34 @@ class TravelPlanDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DAT
         }
         db.insert(TABLE_NAME, null, values)
         db.close() // DB 연결 종료
+    }
+
+    fun updatePlan(travelPlan: TravelPlan): Int {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_DATE, travelPlan.date)  // 날짜도 업데이트
+            put(COLUMN_TIME, travelPlan.time)
+            put(COLUMN_DESTINATION, travelPlan.destination)
+            put(COLUMN_ACTIVITY, travelPlan.activity)
+        }
+
+        // 'no' 기준으로 업데이트
+        return db.update(
+            TABLE_NAME,   // 테이블 이름
+            values,       // 업데이트할 값
+            "$COLUMN_NO = ?",  // 조건
+            arrayOf(travelPlan.no.toString()) // 조건 값
+        )
+    }
+
+    // 여행 계획 삭제 메서드
+    fun deletePlan(planNo: Int): Int {
+        val db = writableDatabase
+        return db.delete(
+            TABLE_NAME,           // 테이블 이름
+            "$COLUMN_NO = ?",     // 조건
+            arrayOf(planNo.toString())  // 조건 값
+        )
     }
 
 }
