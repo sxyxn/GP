@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gp.data.TravelPlanDatabaseHelper
 import java.util.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 class ChatbotActivity : AppCompatActivity() {
     private lateinit var chatbotClient: ChatbotClient
@@ -39,27 +43,41 @@ class ChatbotActivity : AppCompatActivity() {
         sendButton.setOnClickListener {
             val userInput = inputEditText.text.toString()
             if (userInput.isNotEmpty()) {
+                // 사용자 입력을 화면에 추가
                 chatAdapter.addMessage(ChatMessage(userInput, true))
                 inputEditText.text.clear()
 
-                // 임의로 챗봇 응답 생성 (API 호출 없이 대체)
-                val reply = """
-                    1. '해운대 해수욕장'(부산광역시 해운대구 우동)
-                     - 부산에서 가장 유명한 해수욕장으로 여름철에 많은 관광객이 방문합니다.
-                     - 수상 스포츠나 해변 산책
-                    2. '광안리 해수욕장'(부산광역시 수영구 광안동)
-                     - 광안대교가 보이는 야경 명소로 유명합니다.
-                     - 야경 감상, 바다 수영
-                """.trimIndent()
+                // 챗봇 API 호출
+                chatbotClient.getChatResponse(userInput, object : Callback<ChatbotResponse> {
+                    override fun onResponse(call: Call<ChatbotResponse>, response: Response<ChatbotResponse>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let {
+                                // 챗봇의 응답 메시지를 가져옴
+                                val reply = it.choices.firstOrNull()?.message?.content ?: "No response"
+                                chatAdapter.addMessage(ChatMessage(reply, false))
 
-                // 이름과 주소를 파싱
-                val recommendedPlaces = parseRecommendedPlaces(reply)
-                for ((name, address) in recommendedPlaces) {
-                    placeAddressMap[name] = address // 이름과 주소 저장
-                    chatAdapter.addMessage(ChatMessage(name, false, isButton = true))
-                }
+                                // 관광지 추천에 대한 응답을 파싱
+                                val recommendedPlaces = parseRecommendedPlaces(reply)
+                                for ((name, address) in recommendedPlaces) {
+                                    // 이름과 주소를 매핑하고 버튼 메시지 추가
+                                    placeAddressMap[name] = address
+                                    chatAdapter.addMessage(ChatMessage(name, false, isButton = true))
+                                }
+                            }
+                        } else {
+                            // 오류 응답 처리
+                            chatAdapter.addMessage(ChatMessage("Error: ${response.errorBody()?.string()}", false))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ChatbotResponse>, t: Throwable) {
+                        // 네트워크 오류 처리
+                        chatAdapter.addMessage(ChatMessage("Failed to connect: ${t.message}", false))
+                    }
+                })
             }
         }
+
 
         // 버튼 클릭 리스너 설정
         chatAdapter.setOnButtonClickListener { placeName ->
