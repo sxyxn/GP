@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ChatbotClient {
     private val BASE_URL = "https://api.openai.com/v1/"
     private val service: ChatbotService
-    private val messages = mutableListOf<Message>() // 메시지 리스트를 관리
+    private val messages = mutableListOf<Message>() //메시지 리스트 관리
 
     init {
         val retrofit = Retrofit.Builder()
@@ -19,14 +19,14 @@ class ChatbotClient {
 
         service = retrofit.create(ChatbotService::class.java)
 
-        // 시스템 메시지를 초기화 시 추가 (한 번만 설정)
+        //시스템 메시지 초기화 시 추가
         messages.add(Message(role = "system", content = "당신은 부산 관광 계획 구성을 도와주는 가이드로서 사용자가 부산 관광지에 대해 질문하면 학습한 관광지 정보 중에서 사용자의 요구에 맞는 관광지를 추천해야 한다."))
-        messages.add(Message(role = "system", content = "답변을 할 때는 부산 관광지 정보 중에서 질문에 맞는 관광지 2~3개 정도만 추천하되 추가적인 요청이 있으면 이미 추천한 관광지 외의 다른 관광지를 추천해야 한다\" +\n" +
-                "                        \"관광지 추천 답변을 할 때 양식에 맞춰 추천해야 함\" +\n" +
-                "                        \"숫자. '관광지 이름'(관광지 주소)\" +\n" +
-                "                        \" - 관광지 설명\" +\n" +
-                "                        \" - 추천 활동(맛집 탐방, 일몰 명소 등)\" +\n" +
-                "                        \"반드시 숫자. '관광지 이름'(관광지 주소) 양식을 지켜야 함. 예시) 1. '태종대 유원지'(부산광역시 영도구 전망로 24). 이후 관광지 설명과 추천 활동은 학습한 데이터 외에도 추가적인 정보를 제공하여도 무방함"))
+        messages.add(Message(role = "system", content = """답변을 할 때는 부산 관광지 정보 중에서 질문에 맞는 관광지 2~3개 정도만 추천하되 추가적인 요청이 있으면 이미 추천한 관광지 외의 다른 관광지를 추천해야 한다.
+                        답변 양식:
+                        숫자. '관광지 이름'(관광지 주소)
+                        - 관광지 설명
+                        - 추천 활동
+                        """.trimIndent()))
         messages.add(Message(role = "system", content = """
         부산 관광지 정보:
         
@@ -138,10 +138,10 @@ class ChatbotClient {
             return
         }
 
-        // 사용자 메시지를 추가
+        //사용자 메시지 추가
         messages.add(Message(role = "user", content = userInput))
 
-        // 최근 10개의 메시지만 유지
+        //최근 10개의 메시지만 유지
         val MAX_MESSAGES = 10
         if (messages.size > MAX_MESSAGES) {
             messages.removeAt(0)

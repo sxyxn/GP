@@ -96,11 +96,11 @@ class ChatbotActivity : AppCompatActivity() {
 
     private fun parseRecommendedPlaces(reply: String): List<Pair<String, String>> {
         val places = mutableListOf<Pair<String, String>>()
-        val regex = Regex("\\d+\\.\\s([^\\(]+)\\(([^\\)]+)\\)") // 이름과 주소 추출
+        val regex = Regex("\\d+\\.\\s([^\\(]+)\\(([^\\)]+)\\)") //이름과 주소 추출
         val matches = regex.findAll(reply)
         for (match in matches) {
-            val name = match.groupValues[1].trim() // 관광지 이름
-            val address = match.groupValues[2].trim() // 관광지 주소
+            val name = match.groupValues[1].trim() //관광지 이름
+            val address = match.groupValues[2].trim() //관광지 주소
             places.add(Pair(name, address))
         }
         return places

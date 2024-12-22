@@ -10,17 +10,17 @@ class ChatResponseCallback : Callback<ChatbotResponse> {
             val chatbotResponse = response.body()
             val reply = chatbotResponse?.choices?.firstOrNull()?.message?.content
             if (reply != null) {
-                // API 응답 처리
+                //API 응답 처리
                 println("Chatbot response: $reply")
             }
         } else {
-            // API 호출이 실패한 경우 에러 처리
+            //API 호출이 실패한 경우 에러 처리
             println("API Error: ${response.errorBody()?.string()}")
         }
     }
 
     override fun onFailure(call: Call<ChatbotResponse>, t: Throwable) {
-        // API 호출이 실패한 경우 에러 처리
+        //API 호출이 실패한 경우 에러 처리
         println("Request failed: ${t.message}")
     }
 }

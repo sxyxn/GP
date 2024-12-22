@@ -9,7 +9,9 @@ interface ChatbotService {
     @Headers(
         "Content-Type: application/json",
 
-        "Authorization: Bearer sk-proj-"
+        //"Authorization: Bearer sk-proj-"
+
+        "Authorization: Bearer API 키 입력"
     )
     @POST("chat/completions")
     fun getCompletion(@Body request: ChatbotRequest): Call<ChatbotResponse>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/main">
 
-    <!-- ImageView 배치 -->
+
     <ImageView
         android:id="@+id/myImageView"
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="Plan Image" />
 
-    <!-- CalendarView 추가 -->
+
     <android.widget.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@id/myImageView"
         android:layout_marginTop="16dp" />
 
-    <!-- 여행 계획을 표시할 ListView -->
+
     <ListView
         android:id="@+id/travelPlansListView"
         android:layout_width="0dp"
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- 여행 계획이 없을 때 표시할 메시지 TextView 추가 -->
+
     <TextView
         android:id="@+id/travelPlansTextView"
         android:layout_width="wrap_content"
@@ -47,6 +47,6 @@
         app:layout_constraintTop_toBottomOf="@id/calendarView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone" /> <!-- 처음에는 보이지 않도록 설정 -->
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
